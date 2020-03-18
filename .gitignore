@@ -129,3 +129,5 @@ dmypy.json
 .pyre/
 
 *.idea/
+
+zk-single-kafka-single/
