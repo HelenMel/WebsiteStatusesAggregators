@@ -2,8 +2,9 @@ from dataclasses import dataclass
 from typing import Optional
 
 @dataclass
-class WebsiteStatus:
-    '''Class for keeping information about status'''
+class WebsiteStatus():
+    '''Class for keeping information about status. Time specified in milliseconds'''
     url: str
-    response_time: float
+    occured_at: int
+    response_time: Optional[int]
     error_code: Optional[int]
