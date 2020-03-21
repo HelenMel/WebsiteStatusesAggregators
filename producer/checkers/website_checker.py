@@ -1,4 +1,4 @@
-from producer.dto.websitestatus import WebsiteStatus
+from dto.website_status import WebsiteStatus
 import logging
 import requests
 from requests.exceptions import HTTPError
@@ -23,7 +23,7 @@ class WebsiteChecker():
         try:
             response = requests.get(self.url)
             response_time = int(response.elapsed.total_seconds() * 1000)
-            # TODO: add content checking
+            # TODO: add content checking with regex
             response.raise_for_status()
         except HTTPError as http_error:
             error_code = http_error.response.status_code

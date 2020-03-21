@@ -4,7 +4,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-class KafkaTopicPublisher():
+class KafkaWriter():
 
     def __init__(self):
         self._producer = None
@@ -27,3 +27,6 @@ class KafkaTopicPublisher():
     def connect(self, serializer_func) -> None:
         self._producer = KafkaProducer(bootstrap_servers=['localhost:9092'],
                                        value_serializer=serializer_func)
+
+    def close(self) -> None:
+        self._producer.close(timeout=3)
