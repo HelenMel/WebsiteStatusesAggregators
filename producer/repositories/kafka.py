@@ -1,5 +1,6 @@
 from kafka import KafkaProducer
 from kafka.errors import KafkaTimeoutError
+from typing import Callable
 import logging
 
 logger = logging.getLogger(__name__)
@@ -11,7 +12,7 @@ class KafkaWriter():
 
     '''Blocking sync function that send exactly one message
     '''
-    def send_sync(self, topic_name, event) -> None:
+    def send_sync(self, topic_name: str, event: str) -> None:
         if self._producer is None:
             logger.error("Producer are not started yet. Run 'connect'")
             return
@@ -24,7 +25,7 @@ class KafkaWriter():
         except Exception as err:
             logger.error("Kafka send unknown error", err)
 
-    def connect(self, serializer_func) -> None:
+    def connect(self, serializer_func: Callable) -> None:
         self._producer = KafkaProducer(bootstrap_servers=['localhost:9092'],
                                        value_serializer=serializer_func)
 

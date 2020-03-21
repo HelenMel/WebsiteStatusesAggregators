@@ -13,7 +13,7 @@ class WebsiteStatus():
     error_code: Optional[int]
 
     @classmethod
-    def from_dict(cls, d):
+    def from_dict(cls, d: dict):
         try:
             new_item = cls(d['url'],
                            d['occured_at'],

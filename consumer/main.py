@@ -1,5 +1,6 @@
 from consumer.repositories.kafka import KafkaTopicReader
 from consumer.repositories.postgresql import PostgresqlWriter
+from consumer.transforms.website_status_query_builder import WebsiteStatusToSQLBuilder
 import json
 import logging
 
@@ -9,7 +10,8 @@ if __name__ == '__main__':
     print("start consumer")
     topic = "WebsiteStatus"
     group = 'my_group'
-    db_writer = PostgresqlWriter()
+    query_builder = WebsiteStatusToSQLBuilder()
+    db_writer = PostgresqlWriter(query_builder)
     def deserializer_func(x):
         return json.loads(x.decode('utf-8'))
 

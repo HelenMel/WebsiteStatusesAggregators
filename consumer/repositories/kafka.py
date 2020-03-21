@@ -1,6 +1,6 @@
 from kafka import KafkaConsumer
 import logging
-from typing import Optional
+from typing import Optional, Callable
 from consumer.dto.website_status import WebsiteStatus
 
 logger = logging.getLogger(__name__)
@@ -8,9 +8,9 @@ logger = logging.getLogger(__name__)
 class KafkaTopicReader():
 
     def __init__(self,
-                 topic_name,
-                 group_id,
-                 deserializer_func,
+                 topic_name: str,
+                 group_id: str,
+                 deserializer_func: Callable,
                  auto_offset_reset='earliest',
                  enable_auto_commit=True,
                  ):

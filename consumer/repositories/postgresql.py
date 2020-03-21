@@ -1,14 +1,14 @@
 import psycopg2
 import logging
-import uuid
 
 logger = logging.getLogger(__name__)
 
 class PostgresqlWriter():
 
-    def __init__(self):
+    def __init__(self, item_query_builder):
         self._conn = None
         self._cursor = None
+        self.item_query_builder = item_query_builder
 
     @property
     def conn(self):
@@ -27,9 +27,7 @@ class PostgresqlWriter():
     def send_sync(self, item) -> None:
         try:
             self._cursor = self.conn.cursor()
-            query = """INSERT INTO website_status(id, url, occured_at, response_time, error_code)
-                              VALUES(%s, %s, to_timestamp(%s), %s, %s)"""
-            record = (str(uuid.uuid4()), item.url, (item.occured_at / 1000.0), item.response_time, item.error_code)
+            query, record = self.item_query_builder.build(item)
             self._cursor.execute(query, record)
             self.conn.commit()
         except (Exception, psycopg2.DatabaseError) as err:
