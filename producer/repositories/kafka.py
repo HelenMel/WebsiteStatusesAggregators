@@ -16,8 +16,20 @@ class KafkaWriter():
     @property
     def producer(self):
         if self._producer is None:
-            self._producer = KafkaProducer(bootstrap_servers=[self.config.bootstrap_server],
-                                           value_serializer=self.serializer_func)
+            security_protocol = self.config.security_protocol
+            if security_protocol is None:
+                self._producer = KafkaProducer(bootstrap_servers=[self.config.bootstrap_server],
+                                               value_serializer=self.serializer_func)
+            elif security_protocol == 'SSL':
+                self._producer = KafkaProducer(bootstrap_servers=[self.config.bootstrap_server],
+                                                ssl_check_hostname=True,
+                                                security_protocol = security_protocol,
+                                                ssl_cafile= self.config.ssl_cafile,
+                                                ssl_certfile = self.config.ssl_certfile,
+                                                ssl_keyfile = self.config.ssl_keyfile,
+                                                value_serializer=self.serializer_func)
+            else:
+                logger.error("Unknown security protocol")
         return self._producer
 
     '''Blocking sync function that send exactly one message
@@ -33,7 +45,7 @@ class KafkaWriter():
         except KafkaTimeoutError as timeout_err:
             logger.error(f"Kafka send timeout {str(timeout_err)}")
         except Exception as err:
-            logger.error(f"Kafka send unknown error {str(err)}")
+            logger.error(f"Kafka send unknown error {str(err)}", err)
 
     def close(self) -> None:
         if self._producer:

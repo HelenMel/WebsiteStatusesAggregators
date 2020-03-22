@@ -3,7 +3,6 @@ from repositories.kafka import KafkaWriter
 from utilities.json_serializer import JsonSerializer
 from config.app_config import AppConfig
 import schedule
-import threading
 from concurrent.futures import ThreadPoolExecutor
 
 WEBSITES = [
@@ -37,5 +36,6 @@ if __name__ == "__main__":
             break
         except Exception as err:
             break
+    executor.shutdown(wait=True)
     schedule.clear()
     publisher.close()

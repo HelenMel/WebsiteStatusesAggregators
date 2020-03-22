@@ -129,5 +129,6 @@ dmypy.json
 .pyre/
 
 *.idea/
+producer/config/cert/
+.DS_Store
 
-zk-single-kafka-single/
