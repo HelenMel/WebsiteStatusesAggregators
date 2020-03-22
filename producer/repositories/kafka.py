@@ -45,7 +45,7 @@ class KafkaWriter():
         except KafkaTimeoutError as timeout_err:
             logger.error(f"Kafka send timeout {str(timeout_err)}")
         except Exception as err:
-            logger.error(f"Kafka send unknown error {str(err)}", err)
+            logger.error(f"Kafka send unknown error {str(err)}")
 
     def close(self) -> None:
         if self._producer:

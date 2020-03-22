@@ -2,34 +2,42 @@ from kafka import KafkaConsumer
 import logging
 from typing import Optional, Callable
 from consumer.dto.website_status import WebsiteStatus
+from consumer.config.app_config import KafkaConfig
 
 logger = logging.getLogger(__name__)
 
 class KafkaTopicReader():
 
-    def __init__(self,
-                 topic_name: str,
-                 group_id: str,
-                 deserializer_func: Callable,
-                 auto_offset_reset='earliest',
-                 enable_auto_commit=True,
-                 ):
-        self.topic_name = topic_name
-        self.group_name = group_id
+    def __init__(self, config: KafkaConfig, deserializer_func: Callable):
+        self.config = config
         self.deserializer_func = deserializer_func
-        self.auto_offset_reset = auto_offset_reset
-        self.enable_auto_commit = enable_auto_commit
         self._consumer = None
 
     @property
     def consumer(self):
         if self._consumer is None:
-            self._consumer = KafkaConsumer(self.topic_name,
-                                       bootstrap_servers=['localhost:9092'],
-                                       auto_offset_reset=self.auto_offset_reset,
-                                       enable_auto_commit=self.enable_auto_commit,
-                                       group_id=self.group_name,
-                                       value_deserializer=self.deserializer_func)
+            security_protocol = self.config.security_protocol
+            if security_protocol is None:
+                self._consumer = KafkaConsumer(self.config.main_topic_name,
+                                               bootstrap_servers=[self.config.bootstrap_server],
+                                               auto_offset_reset=self.config.auto_offset_reset,
+                                               enable_auto_commit=self.config.enable_auto_commit,
+                                               group_id=self.config.group_id,
+                                               value_deserializer=self.deserializer_func)
+            elif security_protocol == 'SSL':
+                self._consumer = KafkaConsumer(self.config.main_topic_name,
+                                               bootstrap_servers=[self.config.bootstrap_server],
+                                               auto_offset_reset=self.config.auto_offset_reset,
+                                               enable_auto_commit=self.config.enable_auto_commit,
+                                               group_id=self.config.group_id,
+                                               ssl_check_hostname=True,
+                                               security_protocol=security_protocol,
+                                               ssl_cafile=self.config.ssl_cafile,
+                                               ssl_certfile=self.config.ssl_certfile,
+                                               ssl_keyfile=self.config.ssl_keyfile,
+                                               value_deserializer=self.deserializer_func)
+            else:
+                logger.error("Unknown security protocol")
         return self._consumer
 
 
@@ -42,7 +50,7 @@ class KafkaTopicReader():
             # if StopIteration is raised, then no new messages available. Not an error
             return None
         except Exception as err:
-            logger.error("Read batch unknown exception", err)
+            logger.error(f"Read batch unknown exception {str(err)}")
             return None
 
     def close(self) -> None:

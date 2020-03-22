@@ -30,7 +30,7 @@ class WebsiteChecker():
         except HTTPError as http_error:
             error_code = http_error.response.status_code
         except Exception as err:
-            logging.error("Unexpected error during status check for %s" % self.url, err)
+            logging.error(f"Unexpected error during status check for {self.url} error: {err}")
             return None
         finally:
             return WebsiteStatus(event_id, self.url, current_time_milli, response_time, error_code)

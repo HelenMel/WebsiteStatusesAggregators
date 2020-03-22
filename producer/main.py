@@ -4,6 +4,10 @@ from utilities.json_serializer import JsonSerializer
 from config.app_config import AppConfig
 import schedule
 from concurrent.futures import ThreadPoolExecutor
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 WEBSITES = [
     "https://www.verkkokauppa.com/fi/catalog/59a/Lemmikit",
@@ -14,7 +18,7 @@ def main_job(checker, publisher):
     status = checker.check_get()
     if status is not None:
         publisher.send_sync(status)
-        print(f"done {status}")
+        logger.info(f"send {status}")
 
 def main_job_async(executor, checker, publisher):
     executor.submit(main_job, checker, publisher)
