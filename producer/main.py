@@ -3,6 +3,8 @@ from repositories.kafka import KafkaWriter
 from utilities.json_serializer import JsonSerializer
 from config.app_config import AppConfig
 import schedule
+import threading
+from concurrent.futures import ThreadPoolExecutor
 
 WEBSITES = [
     "https://www.verkkokauppa.com/fi/catalog/59a/Lemmikit",
@@ -15,13 +17,19 @@ def main_job(checker, publisher):
         publisher.send_sync(status)
         print(f"done {status}")
 
+def main_job_async(executor, checker, publisher):
+    executor.submit(main_job, checker, publisher)
+
 if __name__ == "__main__":
     app_config = AppConfig()
-    checker = WebsiteChecker(WEBSITES[0])
+    checkers = [WebsiteChecker(url) for url in WEBSITES]
     publisher = KafkaWriter(app_config.kafka_config(), JsonSerializer.dataclass_to_json)
     run_sec = app_config.scheduler_config().request_status_every_sec
+    executor = ThreadPoolExecutor(max_workers=2)
 
-    schedule.every(run_sec).seconds.do(main_job, checker, publisher)
+    for checker in checkers:
+        schedule.every(run_sec).seconds.do(main_job_async, executor, checker, publisher)
+
     while True:
         try:
             schedule.run_pending()
