@@ -1,6 +1,6 @@
 import psycopg2
 import logging
-from consumer.config.app_config import PostgresqlConfig
+from config.app_config import PostgresqlConfig
 
 logger = logging.getLogger(__name__)
 

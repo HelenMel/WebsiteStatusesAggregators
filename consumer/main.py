@@ -1,8 +1,8 @@
-from consumer.repositories.kafka import KafkaTopicReader
-from consumer.repositories.postgresql import PostgresqlWriter
-from consumer.transforms.website_status_query_builder import WebsiteStatusToSQLBuilder
-from consumer.config.app_config import AppConfig
-from consumer.utilities.json_desializer import JsonDeserializer
+from repositories.kafka import KafkaTopicReader
+from repositories.postgresql import PostgresqlWriter
+from transforms.website_status_query_builder import WebsiteStatusToSQLBuilder
+from config.app_config import AppConfig
+from utilities.json_desializer import JsonDeserializer
 import logging
 
 logger = logging.getLogger(__name__)

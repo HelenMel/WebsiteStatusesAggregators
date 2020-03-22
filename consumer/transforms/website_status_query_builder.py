@@ -1,5 +1,5 @@
 from typing import Tuple, Any
-from consumer.dto.website_status import WebsiteStatus
+from dto.website_status import WebsiteStatus
 import uuid
 
 class WebsiteStatusToSQLBuilder():

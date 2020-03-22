@@ -1,8 +1,8 @@
 from kafka import KafkaConsumer
 import logging
 from typing import Optional, Callable
-from consumer.dto.website_status import WebsiteStatus
-from consumer.config.app_config import KafkaConfig
+from dto.website_status import WebsiteStatus
+from config.app_config import KafkaConfig
 
 logger = logging.getLogger(__name__)
 
