@@ -4,6 +4,7 @@ import requests
 from requests.exceptions import HTTPError
 from typing import Optional
 import time
+import uuid
 
 logger = logging.getLogger(__name__)
 
@@ -18,6 +19,7 @@ class WebsiteChecker():
 
     def check_get(self) -> Optional[WebsiteStatus]:
         error_code = None
+        event_id = str(uuid.uuid4())
         current_time_milli = int(round(time.time() * 1000))
         response_time = None
         try:
@@ -31,4 +33,4 @@ class WebsiteChecker():
             logging.error("Unexpected error during status check for %s" % self.url, err)
             return None
         finally:
-            return WebsiteStatus(self.url, current_time_milli, response_time, error_code)
+            return WebsiteStatus(event_id, self.url, current_time_milli, response_time, error_code)
