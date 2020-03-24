@@ -58,7 +58,7 @@ class WebsiteStatusProducer():
                 break
         executor.shutdown(wait=True)
         schedule.clear()
-        publisher.close()
+        self.publisher.close()
 
     def _main_job(self, checker, publisher):
         status = checker.check_get()

@@ -7,6 +7,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class WebsiteStatus():
     '''Class for keeping information about status. Time specified in milliseconds'''
+    id: str
     url: str
     occured_at: int
     response_time: Optional[int]
@@ -15,7 +16,8 @@ class WebsiteStatus():
     @classmethod
     def from_dict(cls, d: dict):
         try:
-            new_item = cls(d['url'],
+            new_item = cls(d['id'],
+                           d['url'],
                            d['occured_at'],
                            d.get('response_time', None),
                            d.get('error_code', None))

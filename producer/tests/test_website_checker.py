@@ -1,8 +1,8 @@
 from unittest import TestCase
 from producer.checkers.website_checker import WebsiteChecker
+from producer.tests.mocked_response import MockedResponse
 from unittest.mock import patch
-from datetime import timedelta
-from requests.exceptions import HTTPError, Timeout
+from requests.exceptions import Timeout
 
 class TestWebsiteChecker(TestCase):
 
@@ -35,14 +35,3 @@ class TestWebsiteChecker(TestCase):
 
         answer = sut.check_get()
         self.assertIsNone(answer)
-
-class MockedResponse:
-    def __init__(self, seconds, status_code, error = False):
-        self.elapsed = timedelta(seconds=seconds)
-        self.seconds = seconds
-        self.status_code = status_code
-        self.error = error
-
-    def raise_for_status(self):
-        if self.error:
-            raise HTTPError(response=MockedResponse(self.seconds, self.status_code))
