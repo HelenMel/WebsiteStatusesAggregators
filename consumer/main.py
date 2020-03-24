@@ -20,7 +20,7 @@ if __name__ == '__main__':
             if status is not None:
                 print(status)
                 db_writer.send_sync(status)
-                print('send')
+                logger.info(f"Status saved to postgres {status}")
         except KeyboardInterrupt as _:
             break
         except Exception as err:

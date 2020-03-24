@@ -1,10 +1,14 @@
 from kafka import KafkaProducer
 from kafka.errors import KafkaTimeoutError
 from typing import Callable
-from config.app_config import KafkaConfig
+from producer.config.app_config import KafkaConfig
 import logging
 
 logger = logging.getLogger(__name__)
+
+class ProducerCreationError(Exception):
+    def __init__(self, message):
+        self.message = message
 
 class KafkaWriter():
 
@@ -30,11 +34,16 @@ class KafkaWriter():
                                                 value_serializer=self.serializer_func)
             else:
                 logger.error("Unknown security protocol")
+                raise ProducerCreationError("Unknown security protocol")
         return self._producer
 
-    '''Blocking sync function that send exactly one message
-    '''
     def send_sync(self, event, topic_name=None) -> None:
+        """Blocking sync function that send exactly one message to kafka
+
+        :param event: any events that could be serialized with serializer_func
+        :param topic_name: name of the topic to store event
+        :return:
+        """
         if topic_name is None:
             topic_name = self.config.main_topic_name
 
@@ -44,10 +53,13 @@ class KafkaWriter():
             logger.debug(f"Message saved to partition: {result.partition} with offset: {result.offset}")
         except KafkaTimeoutError as timeout_err:
             logger.error(f"Kafka send timeout {str(timeout_err)}")
+            raise KafkaTimeoutError
         except Exception as err:
             logger.error(f"Kafka send unknown error {str(err)}")
+            raise err
 
     def close(self) -> None:
         if self._producer:
             self._producer.close(timeout=self.config.conn_close_timeout)
             self._producer = None
+

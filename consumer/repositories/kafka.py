@@ -1,10 +1,18 @@
 from kafka import KafkaConsumer
 import logging
 from typing import Optional, Callable
-from dto.website_status import WebsiteStatus
-from config.app_config import KafkaConfig
+from consumer.dto.website_status import WebsiteStatus
+from consumer.config.app_config import KafkaConfig
 
 logger = logging.getLogger(__name__)
+
+class ConsumerCreationError(Exception):
+    def __init__(self, message):
+        self.message = message
+
+class ReadOneError(Exception):
+    def __init__(self, message):
+        self.message = message
 
 class KafkaTopicReader():
 
@@ -37,7 +45,7 @@ class KafkaTopicReader():
                                                ssl_keyfile=self.config.ssl_keyfile,
                                                value_deserializer=self.deserializer_func)
             else:
-                logger.error("Unknown security protocol")
+                raise ConsumerCreationError("Unknown security protocol")
         return self._consumer
 
 
@@ -50,8 +58,7 @@ class KafkaTopicReader():
             # if StopIteration is raised, then no new messages available. Not an error
             return None
         except Exception as err:
-            logger.error(f"Read batch unknown exception {str(err)}")
-            return None
+            raise ReadOneError(f"Read batch unknown exception {str(err)}")
 
     def close(self) -> None:
         self.consumer.close()

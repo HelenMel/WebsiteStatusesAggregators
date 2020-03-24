@@ -1,4 +1,4 @@
-from dto.website_status import WebsiteStatus
+from producer.dto.website_status import WebsiteStatus
 import logging
 import requests
 from requests.exceptions import HTTPError
@@ -18,6 +18,10 @@ class WebsiteChecker():
         self.url = url
 
     def check_get(self) -> Optional[WebsiteStatus]:
+        """ Run get request that check current website status
+
+        :return:  website status
+        """
         error_code = None
         event_id = str(uuid.uuid4())
         current_time_milli = int(round(time.time() * 1000))
@@ -32,5 +36,4 @@ class WebsiteChecker():
         except Exception as err:
             logging.error(f"Unexpected error during status check for {self.url} error: {err}")
             return None
-        finally:
-            return WebsiteStatus(event_id, self.url, current_time_milli, response_time, error_code)
+        return WebsiteStatus(event_id, self.url, current_time_milli, response_time, error_code)

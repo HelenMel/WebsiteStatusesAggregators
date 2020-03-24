@@ -15,10 +15,6 @@ class KafkaConfig:
     ssl_certfile: Optional[str]
     ssl_keyfile: Optional[str]
 
-@dataclass
-class SchedulerConfig:
-    request_status_every_sec: int
-
 class AppConfig():
 
     def __init__(self):
@@ -74,10 +70,6 @@ class AppConfig():
                            ssl_cafile,
                            ssl_certfile,
                            ssl_keyfile)
-
-    def scheduler_config(self) -> SchedulerConfig:
-        request_status_every_sec = self.conf_parser.getint('scheduler', 'request_status_every_sec')
-        return SchedulerConfig(request_status_every_sec)
 
 
 
