@@ -91,5 +91,5 @@ class TestPostgresqlWriterClose(TestCase):
 
         sut._cursor = conn_mock
         sut.close()
-        conn_mock.close.assert_not_called()
+        conn_mock.close.assert_called_once()
 

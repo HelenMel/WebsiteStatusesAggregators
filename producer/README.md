@@ -1,6 +1,4 @@
 # Website statuses aggregator
-
-
 Service that checks websites availabilities
 
 Currently it checks two predefined websites: `www.verkkokauppa.com` and www.verkkokauppa.com`
@@ -8,11 +6,8 @@ Currently it checks two predefined websites: `www.verkkokauppa.com` and www.verk
 Project has two parts: producer and consumer.
 Producer check websites statuses and stores it to kafka
 to start producer, run:
-
-
 ```
-pip install ./producer
-python -m producer
+python producer/main.py
 ```
 
 Consumer listen to website statuses kafka topic and stores them to postgres

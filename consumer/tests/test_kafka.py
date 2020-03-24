@@ -10,10 +10,11 @@ config = KafkaConfig('localhost:9092', topic, 'earliest', True, group_id, None, 
 class TestKafkaTopicReader(TestCase):
     def test_read_one_success(self):
         sut = KafkaTopicReader(config, str)
-        sent_event = Message({'url': 'http://google.com',
-                      'occured_at': 1585037107,
-                      'response_time': 11,
-                      'error_code': 404})
+        sent_event = Message({'id': "id1",
+                              'url': 'http://google.com',
+                              'occured_at': 1585037107,
+                              'response_time': 11,
+                              'error_code': 404})
         sut._consumer = MagicMock()
         sut._consumer.__next__.return_value = sent_event
         response = sut.read_one()

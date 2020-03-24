@@ -23,6 +23,6 @@ class WebsiteStatus():
                            d.get('error_code', None))
             return new_item
         except KeyError as key_err:
-            logger.error(f'Parsing error. Required filed is missing {str(key_err)}')
+            logger.error(f'Parsing error. Required field is missing {str(key_err)}')
             return None
 
