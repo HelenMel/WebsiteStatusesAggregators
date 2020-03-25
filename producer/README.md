@@ -1,4 +1,6 @@
 # Website statuses aggregator
+
+
 Service that checks websites availabilities
 
 Currently it checks two predefined websites: `www.verkkokauppa.com` and www.verkkokauppa.com`
@@ -6,33 +8,27 @@ Currently it checks two predefined websites: `www.verkkokauppa.com` and www.verk
 Project has two parts: producer and consumer.
 Producer check websites statuses and stores it to kafka
 to start producer, run:
+
+
 ```
-python producer/main.py
+pip install ./producer
+python -m producer
 ```
 
 Consumer listen to website statuses kafka topic and stores them to postgres
 ```
-python consumer/main.py
+pip install ./consumer
+python -m consumer
 ```
 
-Both require either connection to local kafka and postgres 
-or access to remote services. Both services could be configured using configuration file
+### !!! Both require access to remote services. !!! ###
 
-Producer's configuration stored in `producer/config/config-live.ini`
+Both services could be configured using configuration file
 
-Cunsumer's configuration stored in `consumer/config/config-live.ini`
-
-System currently has two environments `dev` and `live`:
- -  `dev` environment rely on kafka and postgresql running on local machine
- -  `live` environment connect to remote kafka and postgresql services 
+Prod environment connect to remote kafka and postgresql services 
  and requires kafka certificates and key stored in `HOME/kafka/cert/` folder and
- postgresql service password stored `kafka/pass/avnadm.pgpass`
- 
- Default one is `dev`
- To change environment, environment variable `ENV`:
-```
-export ENV=live
-```
+ postgresql service password stored `HOME/kafka/pass/avnadm.pgpass`
+
 
 #Setup development environment
 

@@ -1,6 +1,6 @@
 from unittest import TestCase
 from producer.checkers.website_checker import WebsiteChecker
-from producer.tests.mocked_response import MockedResponse
+from tests.mocked_response import MockedResponse
 from unittest.mock import patch
 from requests.exceptions import Timeout
 

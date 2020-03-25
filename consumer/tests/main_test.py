@@ -1,7 +1,6 @@
 from unittest import TestCase
 from unittest.mock import Mock
-from consumer.main import WebsiteStatusConsumer
-import schedule
+from consumer.__main__ import WebsiteStatusConsumer
 from threading import Thread
 from time import sleep
 

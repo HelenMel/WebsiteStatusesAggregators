@@ -4,8 +4,8 @@ from unittest.mock import Mock, patch
 import requests
 import unittest
 import schedule
-from producer.main import WebsiteStatusProducer
-from producer.tests.mocked_response import MockedResponse
+from producer.__main__ import WebsiteStatusProducer
+from tests.mocked_response import MockedResponse
 
 class TestProducerIntegration(TestCase):
     @patch('producer.checkers.website_checker.requests')

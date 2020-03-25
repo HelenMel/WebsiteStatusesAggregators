@@ -16,7 +16,7 @@ REQ_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "pip-dep")
 core_requirements = get_requirements(os.path.join(REQ_DIR, "requirements.txt"))
 
 setup(
-    name="producer",
+    name="consumer",
     version="0.0.1",
     author = "olena babenko",
     author_email = "to.helen.babenko@gmail.com",

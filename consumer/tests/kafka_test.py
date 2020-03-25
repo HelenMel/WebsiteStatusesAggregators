@@ -10,7 +10,7 @@ config = KafkaConfig('localhost:9092', topic, 'earliest', True, group_id, None, 
 class TestKafkaTopicReader(TestCase):
     def test_read_one_success(self):
         sut = KafkaTopicReader(config, str)
-        sent_event = Message({'id': "id1",
+        sent_event = Message({'uuid': "id1",
                               'url': 'http://google.com',
                               'occured_at': 1585037107,
                               'response_time': 11,

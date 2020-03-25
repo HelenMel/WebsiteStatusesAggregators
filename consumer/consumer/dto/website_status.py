@@ -16,7 +16,7 @@ class WebsiteStatus():
     @classmethod
     def from_dict(cls, d: dict):
         try:
-            new_item = cls(d['id'],
+            new_item = cls(d['uuid'],
                            d['url'],
                            d['occured_at'],
                            d.get('response_time', None),
